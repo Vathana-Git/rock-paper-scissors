@@ -6,7 +6,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Roboto", sans-serif;
-  background-color: #659dbd;
+  background-color: #22333d;
 }
 
 /* .page-container {
@@ -31,7 +31,7 @@ body {
 
 .container {
   height: 90vh;
-  background-color: #22333d;  
+  background-color: #1f2937;
 }
 
 .welcome-container,
@@ -74,7 +74,6 @@ button {
 }
 
 .game-content {
-  border: 1px solid black;
   width: 100%;
   height: 100%;
   display: flex;
