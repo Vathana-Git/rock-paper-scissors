@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="header-container">
+    <div class="header-text">Rock Paper Scissors</div>
+  </div>
+  <div class="container">
+    <div class="welcome-container">
+      <div class="welcome-content">
+        <div class="main-text">Welcome to a game of rock paper and scissors!</div>
+        <div class="sub-text">You will be playing against a computer.</div>
+        <div class="sub-text">Get five points to win the game!</div>
+        <button id="play-button">Play</button>
+      </div>
+    </div>
+    <div class="game-container">
+      <div class="game-content">
+          <div class="scoreboard main-text">
+            <div class="player-score">Your Score</div>
+            <div class="scores">0 - 0</div>
+            <div class="computers-score">Computer's Score</div>
+          </div>
+          <div class="choice-cards">
+            <img id="rock" src="images/rock.png" alt="A photo of rock ">
+            <img id="paper" src="images/paper.png" alt="A photo of rock ">
+            <img id="scissors" src="images/scissors.png" alt="A photo of rock ">
+          </div>
+          <div class="action-container">
+            <div class="result sub-text"></div>
+            <div class="action-prompt sub-text">Choose your play</div>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
