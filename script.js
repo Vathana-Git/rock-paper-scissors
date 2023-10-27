@@ -9,56 +9,13 @@ function getComputerChoice() {
   }
 }
 
-function getPlayerChoice() {
-  let choice = "";
-  while (true) {
-    if (choice != "Rock" && choice != "Paper" && choice != "Scissors") {
-      choice = prompt("Choose your play: ");
-      choice = choice.toLowerCase()
-      choice = choice.charAt(0).toUpperCase() + choice.slice(1);
-    } else {   
-      return choice;
-    }
-  }
-}
-
-function playRound(playerChoice, computerChoice) {
-
-  // Return 1 if the player wins, -1 if the computer wins, or 0 if it's a tie
-
-  playerChoice = playerChoice.toLowerCase();
-  computerChoice = computerChoice.toLowerCase();
-
-  if (playerChoice === computerChoice) {
-    return 0;
-  } else if (playerChoice === "rock") {
-    if (computerChoice === "paper") {
-      return -1;
-    } else {
-      return 1;
-    }
-  } else if (playerChoice === "paper") {
-    if (computerChoice === "rock") {
-      return 1;
-    } else {
-      return -1;
-    }
-  } else if (playerChoice === "scissors") {
-    if (computerChoice === "rock") {
-      return -1;
-    } else {
-      return 1;
-    }
-  }
-}
-
-function announcement(result, playerChoice, computerChoice) {
+function getAnnouncementText(result, playerChoice, computerChoice) {
 
   playerChoice = playerChoice.charAt(0).toUpperCase() + playerChoice.slice(1);
   computerChoice = computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1);
 
   if (result === 0) {
-    return "It's a tie!"
+    return `It's a tie! You both chose ${playerChoice}`;
   } else if (result === 1) {
     return `You win! ${playerChoice} beats ${computerChoice}.`;
   } else {
@@ -66,30 +23,65 @@ function announcement(result, playerChoice, computerChoice) {
   }
 }
 
-function game() {
+function playRound(event) {
+  
+  let playerChoice = event.target.id;
+  let computerChoice = getComputerChoice().toLowerCase();
+  let roundResult;
 
-  let score = 0;
-  let result = "";
-  let playerChoice, computerChoice;
-
-  for (let i = 0; i < 5; i++) {
-    playerChoice = getPlayerChoice();
-    computerChoice = getComputerChoice();
-    result = playRound(playerChoice, computerChoice);
-    console.log(`Round ${Number(i) + 1}: ${announcement(result, playerChoice, computerChoice)}`)
-    score = score + Number(result);
+  if (playerChoice === computerChoice) {
+    roundResult = 0;
+  } else if (playerChoice === "rock") {
+    if (computerChoice === "paper") {
+      roundResult = -1;
+    } else {
+      roundResult = 1;
+    }
+  } else if (playerChoice === "paper") {
+    if (computerChoice === "rock") {
+      roundResult = 1;
+    } else {
+      roundResult = -1;
+    }
+  } else if (playerChoice === "scissors") {
+    if (computerChoice === "rock") {
+      roundResult = -1;
+    } else {
+      roundResult = 1;
+    }
   }
 
-  if (score === 0) {
-    console.log("It's a draw!")
-  } else if (score > 0) {
-    console.log("Congratulations, you won!")
+  if (roundResult === 1) {
+    playerTotalScore++;
+  } else if (roundResult === -1) {
+    computerTotalScore++;
+  }
+
+  const scoresDiv = document.querySelector(".scores");
+  const resultDiv = document.querySelector(".result");
+  const actionPrompt = document.querySelector(".action-prompt");  
+
+  scoresDiv.textContent = playerTotalScore + " - " + computerTotalScore;  
+
+  resultDiv.textContent = getAnnouncementText(roundResult, playerChoice, computerChoice)
+
+  if (playerTotalScore === 5 || computerTotalScore === 5) {
+    
+    endGame();  
+  
+    if (playerTotalScore === 5) {
+      actionPrompt.textContent = "Congratulations, you won the game!"
+    } else if (computerTotalScore === 5) {
+      actionPrompt.textContent = "You lost the game. Better luck next time!"
+    }
+
   } else {
-    console.log("You lost. Better luck next time!")
-  }
-}
 
-// 
+    actionPrompt.textContent = "\nChoose your next play";
+
+  }
+
+}
 
 function showGameDiv() {
 
@@ -106,66 +98,54 @@ function showGameDiv() {
 
 function createPlayEvents() {
   const rock = document.querySelector("#rock");
-  rock.addEventListener("click", choosePlay);
+  rock.addEventListener("click", playRound);
   const paper = document.querySelector("#paper");
-  paper.addEventListener("click", choosePlay);
+  paper.addEventListener("click", playRound);
   const scissors = document.querySelector("#scissors");
-  scissors.addEventListener("click", choosePlay);
+  scissors.addEventListener("click", playRound);
 }
 
 function removePlayEvents() {
   const rock = document.querySelector("#rock");
-  rock.removeEventListener("click", choosePlay);
+  rock.removeEventListener("click", playRound);
   const paper = document.querySelector("#paper");
-  paper.removeEventListener("click", choosePlay);
+  paper.removeEventListener("click", playRound);
   const scissors = document.querySelector("#scissors");
-  scissors.removeEventListener("click", choosePlay);
+  scissors.removeEventListener("click", playRound);
 }
 
-function choosePlay(event) {
+function endGame() {
 
-  let playerChoice = event.target.id;
-  let computerChoice = getComputerChoice();
+  removePlayEvents();
 
-  let result = playRound(playerChoice, computerChoice);
+  let replayButton = document.createElement("button");
+  replayButton.textContent = "Play Again";
+  replayButton.addEventListener("click", restartGame);
 
-  if (result === 1) {
-    playerTotalScore++;
-  } else if (result === -1) {
-    computerTotalScore++;
-  }
+  const actionContainer = document.querySelector(".action-container");
+  actionContainer.appendChild(replayButton);
 
-  const scores = document.querySelector(".scores");
+}
+
+function restartGame(event) {
+
+  const scoresDiv = document.querySelector(".scores");
   const resultDiv = document.querySelector(".result");
   const actionPrompt = document.querySelector(".action-prompt");  
 
-  scores.textContent = playerTotalScore + " - " + computerTotalScore;  
+  playerTotalScore = computerTotalScore = 0;
+  scoresDiv.textContent = playerTotalScore + " - " + computerTotalScore;
+  resultDiv.textContent = "";
+  actionPrompt.textContent = "Choose your play"
 
-  if (playerTotalScore === 5) {
-    resultDiv.textContent = "Congratulations, you won!"
-  } else if (computerTotalScore === 5) {
-    resultDiv.textContent = "You lost. Better luck next time!"
-  }
+  event.target.remove();
 
-  if (playerTotalScore === 5 || computerTotalScore === 5) {
-    let replayButton = document.createElement("button");
-    replayButton.textContent = "Play Again";
-    replayButton.addEventListener("click", () => {
-      location.reload();
-    });
-    const actionContainer = document.querySelector(".action-container");
-    actionContainer.appendChild(replayButton);
-    actionPrompt.remove();
-    removePlayEvents();
-  } else {
-    resultDiv.textContent = announcement(result, playerChoice, computerChoice)
-    actionPrompt.textContent = "\nChoose your next play";
-  }
+  createPlayEvents();  
+
 }
 
-const playButton = document.querySelector("#play-button");
-playButton.addEventListener("click", showGameDiv);
-
 let playerTotalScore = 0, computerTotalScore = 0;
+
+document.querySelector("#play-button").addEventListener("click", showGameDiv);
 
 createPlayEvents();

@@ -130,6 +130,10 @@ button {
   transition: 0.1s ease-out;
 }
 
+#scissors {
+  transform: scale(-1, 1);  
+}
+
 .action-container {
   display: flex;
   flex-direction: column;
